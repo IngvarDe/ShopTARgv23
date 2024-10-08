@@ -3,11 +3,7 @@ using ShopTARgv23.Core.Domain;
 using ShopTARgv23.Core.Dto;
 using ShopTARgv23.Core.ServiceInterface;
 using ShopTARgv23.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ShopTARgv23.ApplicationServices.Services
 {
@@ -69,6 +65,15 @@ namespace ShopTARgv23.ApplicationServices.Services
             return domain;
         }
 
-        //teha valmis Details vaade
+        public async Task<RealEstate> Delete(Guid id)
+        {
+            var result = await _context.RealEstates
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            _context.RealEstates.Remove(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
     }
 }

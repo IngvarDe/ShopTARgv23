@@ -140,5 +140,42 @@ namespace ShopTARgv23.Controllers
 
             return View(vm);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var realEstate = await _realEstatesServices.GetAsync(id);
+
+            if(realEstate == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new RealEstateDeleteViewModel();
+
+            vm.Id = id;
+            vm.Id = realEstate.Id;
+            vm.Size = realEstate.Size;
+            vm.Location = realEstate.Location;
+            vm.RoomNumber = realEstate.RoomNumber;
+            vm.BuildingType = realEstate.BuildingType;
+            vm.CreatedAt = realEstate.CreatedAt;
+            vm.ModifiedAt = realEstate.ModifiedAt;
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmation(Guid id)
+        {
+            var realEstate = await _realEstatesServices.Delete(id);
+
+            if (realEstate == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
