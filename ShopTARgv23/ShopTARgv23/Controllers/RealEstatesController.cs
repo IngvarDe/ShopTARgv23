@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopTARgv23.ApplicationServices.Services;
 using ShopTARgv23.Core.Dto;
 using ShopTARgv23.Core.ServiceInterface;
@@ -88,6 +89,17 @@ namespace ShopTARgv23.Controllers
                 return NotFound();
             }
 
+            var photos = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == id)
+                .Select(y => new RealEstateImageViewModel
+                {
+                    RealEstateId = y.Id,
+                    ImageId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
+
             var vm = new RealEstatesCreateUpdateViewModel();
 
             vm.Id = realEstate.Id;
@@ -97,6 +109,7 @@ namespace ShopTARgv23.Controllers
             vm.BuildingType = realEstate.BuildingType;
             vm.CreatedAt = realEstate.CreatedAt;
             vm.ModifiedAt = realEstate.ModifiedAt;
+            vm.Image.AddRange(photos);
 
 
             return View("CreateUpdate", vm);
@@ -136,6 +149,17 @@ namespace ShopTARgv23.Controllers
                 return NotFound();
             }
 
+            var photos = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == id)
+                .Select(y => new RealEstateImageViewModel
+                {
+                    RealEstateId = y.Id,
+                    ImageId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
+
             var vm = new RealEstateDetailsViewModel();
 
             vm.Id = id;
@@ -146,6 +170,7 @@ namespace ShopTARgv23.Controllers
             vm.BuildingType = realEstate.BuildingType;
             vm.CreatedAt = realEstate.CreatedAt;
             vm.ModifiedAt = realEstate.ModifiedAt;
+            vm.Image.AddRange(photos);
 
             return View(vm);
         }
