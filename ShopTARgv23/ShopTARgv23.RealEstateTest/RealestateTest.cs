@@ -52,5 +52,37 @@ namespace ShopTARgv23.RealEstateTest
             //Assert
             Assert.Equal(correctGuid, guid);
         }
+
+        [Fact]
+        public async Task Should_DeleteByIdRealEstate_WhenDeleteRealestate()
+        {
+            RealEstateDto realEstate = MockRealEstateData();
+
+            var addRealEstate = await Svc<IRealEstateServices>().Create(realEstate);
+            var result = await Svc<IRealEstateServices>().Delete((Guid)addRealEstate.Id);
+
+            Assert.Equal(result, addRealEstate);
+        }
+
+        [Fact]
+        public async Task ShouldNot_DeleteByIdRealEstate_WhenDidNotDeleteRealEstate()
+        {
+
+        }
+
+        private RealEstateDto MockRealEstateData()
+        {
+            RealEstateDto realEstate = new()
+            {
+                Location = "asd",
+                Size = 100,
+                RoomNumber = 1,
+                BuildingType = "asd",
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now,
+            };
+
+            return realEstate;
+        }
     }
 }
