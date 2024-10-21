@@ -1,3 +1,4 @@
+using ShopTARgv23.Core.Domain;
 using ShopTARgv23.Core.Dto;
 using ShopTARgv23.Core.ServiceInterface;
 
@@ -67,10 +68,72 @@ namespace ShopTARgv23.RealEstateTest
         [Fact]
         public async Task ShouldNot_DeleteByIdRealEstate_WhenDidNotDeleteRealEstate()
         {
+            RealEstateDto realEstate = MockRealEstateData();
 
+            var realEstate1 = await Svc<IRealEstateServices>().Create(realEstate);
+            var realEstate2 = await Svc<IRealEstateServices>().Create(realEstate);
+
+            var result = await Svc<IRealEstateServices>().Delete((Guid)realEstate2.Id);
+
+            Assert.NotEqual(realEstate1.Id, result.Id);
+        }
+
+        [Fact]
+        public async Task Should_UpdateRealEstate_WhenUpdateData()
+        {
+            var guid = Guid.Parse("1f9e4cce-85a7-4eb7-8379-b12a150fee10");
+
+            //uued andmed
+            RealEstateDto dto = MockRealEstateData();
+
+            //andmebaasis olevad andmed
+            RealEstate domain = new();
+
+            domain.Id = Guid.Parse("1f9e4cce-85a7-4eb7-8379-b12a150fee10");
+            domain.Location = "qwerty";
+            domain.Size = 34;
+            domain.RoomNumber = 1234;
+            domain.BuildingType = "qwerty";
+            domain.CreatedAt = DateTime.UtcNow;
+            domain.ModifiedAt = DateTime.UtcNow;
+
+            await Svc<IRealEstateServices>().Update(dto);
+
+            Assert.Equal(domain.Id, guid);
+            Assert.DoesNotMatch(domain.Location, dto.Location);
+            Assert.DoesNotMatch(domain.RoomNumber.ToString(), dto.RoomNumber.ToString());
+            Assert.NotEqual(domain.Size, dto.Size);
+        }
+
+        [Fact]
+        public async Task Should_UpdateRealEstate_WhenUpdateDataVersion2()
+        {
+            RealEstateDto dto = MockRealEstateData();
+            var createRealEstate = await Svc<IRealEstateServices>().Create(dto);
+
+            RealEstateDto update = MockUpdateRealEstateData();
+            var result = await Svc<IRealEstateServices>().Update(update);
+
+            Assert.DoesNotMatch(result.Location, createRealEstate.Location);
+            Assert.NotEqual(result.ModifiedAt, createRealEstate.ModifiedAt);
         }
 
         private RealEstateDto MockRealEstateData()
+        {
+            RealEstateDto realEstate = new()
+            {
+                Location = "asd",
+                Size = 100,
+                RoomNumber = 1,
+                BuildingType = "asd",
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now,
+            };
+
+            return realEstate;
+        }
+
+        private RealEstateDto MockUpdateRealEstateData()
         {
             RealEstateDto realEstate = new()
             {
