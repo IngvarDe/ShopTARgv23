@@ -1,6 +1,5 @@
-﻿
+﻿using ShopTARgv23.Core.Dto.CocktailDto;
 
-using ShopTARgv23.Core.Dto.CocktailDto;
 
 namespace ShopTARgv23.Core.ServiceInterface
 {

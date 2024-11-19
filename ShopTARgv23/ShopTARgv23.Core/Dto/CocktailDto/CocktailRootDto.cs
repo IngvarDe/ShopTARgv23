@@ -164,3 +164,4 @@ namespace ShopTARgv23.Core.Dto.CocktailDto
         [JsonPropertyName("dateModified")]
         public string DateModified { get; set; }
     }
+}
