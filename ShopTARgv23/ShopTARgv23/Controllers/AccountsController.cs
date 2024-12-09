@@ -39,6 +39,7 @@ namespace ShopTARgv23.Controllers
                     UserName = vm.Email,
                     Email = vm.Email,
                     City = vm.City,
+                    FirstName = vm.FirstName,
                 };
 
                 var result = await _userManager.CreateAsync(user, vm.Password);
