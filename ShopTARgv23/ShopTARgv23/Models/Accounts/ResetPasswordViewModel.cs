@@ -4,7 +4,7 @@ namespace ShopTARgv23.Models.Accounts
 {
     public class ResetPasswordViewModel
     {
-        [Required]
+        //[Required]
         [EmailAddress]
         public string Email { get; set; }
 
